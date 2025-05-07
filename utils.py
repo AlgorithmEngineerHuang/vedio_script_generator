@@ -7,11 +7,6 @@
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_community.utilities import WikipediaAPIWrapper
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
 
 def generate_script(subject, length, creativity, api_key):
     title_template = ChatPromptTemplate.from_messages(
@@ -33,7 +28,7 @@ def generate_script(subject, length, creativity, api_key):
     )
 
     model = ChatOpenAI(model="deepseek-chat", openai_api_key=api_key,
-                       openai_api_base=os.getenv("DEEPSEEK_BASE_URL"))
+                       openai_api_base="https://api.deepseek.com")
 
     title_chain = title_template | model
     script_chain = script_template | model
