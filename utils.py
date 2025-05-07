@@ -36,5 +36,3 @@ def generate_script(subject, video_length, creativity, api_key):
                                   "wikipedia_search": search_result}).content
 
     return search_result, title, script
-
-print(generate_script("sora模型", 1, 0.7, os.getenv("OPENAI_API_KEY")))
