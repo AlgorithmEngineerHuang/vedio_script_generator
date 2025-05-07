@@ -22,7 +22,7 @@ def generate_script(subject, video_length, creativity, api_key):
         ]
     )
 
-    model = ChatOpenAI(openai_api_key=api_key, temperature=creativity)
+    model = ChatOpenAI(openai_api_key=api_key, temperature=creativity, base_url="https://api.aigc369.com/v1")
 
     title_chain = title_template | model
     script_chain = script_template | model
