@@ -1,20 +1,15 @@
-# @CODING   : UTF-8
-# @VERSION  : 1.0
-# @AUTHOR   : Huangxuan
-# @FILE     : utils.py
-# @TIME     : 2025/5/7-15:16
-
-from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
 from langchain_community.utilities import WikipediaAPIWrapper
 
-def generate_script(subject, length, creativity, api_key):
+# import os
+
+def generate_script(subject, video_length, creativity, api_key):
     title_template = ChatPromptTemplate.from_messages(
         [
             ("human", "请为'{subject}'这个主题的视频想一个吸引人的标题")
         ]
     )
-
     script_template = ChatPromptTemplate.from_messages(
         [
             ("human",
@@ -27,8 +22,7 @@ def generate_script(subject, length, creativity, api_key):
         ]
     )
 
-    model = ChatOpenAI(model="deepseek-chat", openai_api_key=api_key,
-                       openai_api_base="https://api.deepseek.com")
+    model = ChatOpenAI(openai_api_key=api_key, temperature=creativity)
 
     title_chain = title_template | model
     script_chain = script_template | model
@@ -38,10 +32,9 @@ def generate_script(subject, length, creativity, api_key):
     search = WikipediaAPIWrapper(lang="zh")
     search_result = search.run(subject)
 
-    script = script_chain.invoke({"title": title, "duration": length, "wikipedia_search": search_result}).content
+    script = script_chain.invoke({"title": title, "duration": video_length,
+                                  "wikipedia_search": search_result}).content
 
     return search_result, title, script
 
-
-# 测试
-# print(generate_script("Sora模型", 1, 0.7, os.getenv("DEEPSEEK_API_KEY")))
+print(generate_script("sora模型", 1, 0.7, os.getenv("OPENAI_API_KEY")))
